@@ -17,3 +17,6 @@ Always prefix your post type functions and identifiers with a short prefix that 
 1. Your custom post type identifier should not exceed 20 characters
 1. To ensure forward compatibility, do not use wp_ as your identifier — it is being used by WordPress core.
 
+##TODO 
+
+1. Add a template for custom taxonomies
