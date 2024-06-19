@@ -5,60 +5,89 @@
  *
  * @return void
  */
-add_action( 'init', 'register_products_post_type' );
-function register_products_post_type() { 
-	$labels = array(
-		'name'               => __( 'Products', 'Post type general name', 'text-domain' ),
-		'singular_name'      => __( 'Product', 'Post type singular name', 'text-domain' ),
-		'add_new'            => __( 'Add New', 'text-domain' ),
-		'add_new_item'       => __( 'Add New Product', 'text-domain' ),
-		'edit_item'          => __( 'Edit Product', 'text-domain' ),
-		'new_item'           => __( 'New Product', 'text-domain' ),
-		'view_item'          => __( 'View Product', 'text-domain' ),
-		'search_items'       => __( 'Search Products', 'text-domain' ),
-		'not_found'          => __( 'No Product Found', 'text-domain' ),
-		'not_found_in_trash' => __( 'No Product found in Trash', 'text-domain' ),
-		'menu_name'             => __( 'Products', 'Admin Menu text', 'textdomain' ),
-		'name_admin_bar'        => __( 'Product', 'Add New on Toolbar', 'textdomain' ),
-		'all_items'             => __( 'All Products', 'textdomain' ),
-		'parent_item_colon'     => __( 'Parent Products:', 'textdomain' ),
-		//Most of the options below are optional.Use them only when you need them
-		'featured_image'        => __( 'Product Cover Image', 'Overrides the “Featured Image” phrase for this post type. Added in 4.3', 'textdomain' ),
-		'set_featured_image'    => __( 'Set cover image', 'Overrides the “Set featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
-		'remove_featured_image' => __( 'Remove cover image', 'Overrides the “Remove featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
-		'use_featured_image'    => __( 'Use as cover image', 'Overrides the “Use as featured image” phrase for this post type. Added in 4.3', 'textdomain' ),
-		'archives'              => __( 'Product archives', 'The post type archive label used in nav menus. Default “Post Archives”. Added in 4.4', 'textdomain' ),
-		'insert_into_item'      => __( 'Insert into product', 'Overrides the “Insert into post”/”Insert into page” phrase (used when inserting media into a post). Added in 4.4', 'textdomain' ),
-		'uploaded_to_this_item' => __( 'Uploaded to this product', 'Overrides the “Uploaded to this post”/”Uploaded to this page” phrase (used when viewing media attached to a post). Added in 4.4', 'textdomain' ),
-		'filter_items_list'     => __( 'Filter products list', 'Screen reader text for the filter links heading on the post type listing screen. Default “Filter posts list”/”Filter pages list”. Added in 4.4', 'textdomain' ),
-		'items_list_navigation' => __( 'Products list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default “Posts list navigation”/”Pages list navigation”. Added in 4.4', 'textdomain' ),
-		'items_list'            => __( 'Products list', 'Screen reader text for the items list heading on the post type listing screen. Default “Posts list”/”Pages list”. Added in 4.4', 'textdomain' ),
-	);
-	$args = array(
-		'label'               => __( 'Products', 'text-domain' ),
-		'labels'              => $labels,
-		'description'         => __( 'Products you have worked on', 'text-domain'),
-		'show_ui'             => true,
-		'show_in_menu'        => true,
-		'show_in_admin_bar'   => true,
-		'has_archive'         => false,
-		'public'              => true,
-		'publicly_queryable'  => true,
-		'can_export'          => true,
-		'show_in_rest'        => true,
-		'exclude_from_search' => false,
-		'hierarchical'        => false,
-		'menu_icon'           => 'dashicons-groups',
-		'capability_type'     => 'post',
-		'taxonomies'          => array( '' ),
-		'rewrite'             => array( 'slug' => 'products' ),
-		'supports'            => array( 
-			'title',
-			'custom-fields',
-			'thumbnail',
-			'editor'
-		),
+add_action('init', 'register_cpts');
 
-	);
-	register_post_type( 'cpt_products', $args );
+function register_cpts()
+{
+    $custom_post_types = array(
+        'jobs' => [
+            'name'                  => _x('Jobs', 'Post type general name', 'blocksy'),
+            'singular_name'         => _x('job', 'Post type singular name', 'blocksy'),
+            'description'           => _x('Description', 'Post type singular name', 'blocksy'),
+            'taxonomies'            => array('location', 'job-category'),
+            'supports'              => array('title', 'editor', 'author', 'thumbnail', 'excerpt'),
+            'hierarchical'          => false,
+            'capability_type'       => 'post',
+            'has_archive'           => true,
+        ]
+    );
+
+    $custom_taxonomies = array(
+        'location' => [
+            'name'              => _x('Locations', 'taxonomy general name', 'blocksy'),
+            'singular_name'     => _x('location', 'taxonomy singular name', 'blocksy'),
+            'search_items'      => __('Search Locations', 'blocksy'),
+            'all_items'         => __('All Locations', 'blocksy'),
+            'edit_item'         => __('Edit Location', 'blocksy'),
+            'update_item'       => __('Update Location', 'blocksy'),
+            'add_new_item'      => __('Add New Location', 'blocksy'),
+            'new_item_name'     => __('New Location Name', 'blocksy'),
+            'object_type'       => array('jobs'),
+            'hierarchical'      => true
+        ],
+        'job-category' => [
+            'name'              => _x('Categories', 'taxonomy general name', 'blocksy'),
+            'singular_name'     => _x('job-category', 'taxonomy singular name', 'blocksy'),
+            'plural_name'       => _x('categories', 'taxonomy plural name', 'blocksy'),
+            'search_items'      => __('Search Categories', 'blocksy'),
+            'all_items'         => __('All Categories', 'blocksy'),
+            'edit_item'         => __('Edit Category', 'blocksy'),
+            'update_item'       => __('Update Category', 'blocksy'),
+            'add_new_item'      => __('Add New Category', 'blocksy'),
+            'new_item_name'     => __('New Category Name', 'blocksy'),
+            'object_type'       => array('jobs'),
+            'hierarchical'      => true
+        ],
+        'company' => [
+            'name'              => _x('Companies', 'taxonomy general name', 'blocksy'),
+            'singular_name'     => _x('company', 'taxonomy singular name', 'blocksy'),
+            'plural_name'       => _x('companies', 'taxonomy plural name', 'blocksy'),
+            'search_items'      => __('Search Companies', 'blocksy'),
+            'all_items'         => __('All Companies', 'blocksy'),
+            'edit_item'         => __('Edit Company', 'blocksy'),
+            'update_item'       => __('Update Company', 'blocksy'),
+            'add_new_item'      => __('Add New Company', 'blocksy'),
+            'new_item_name'     => __('New Company Name', 'blocksy'),
+            'object_type'       => array('jobs'),
+            'hierarchical'      => true
+        ]
+    );
+
+    foreach ($custom_taxonomies as $custom_taxonomy) {
+        $args = array(
+            'labels'             => $custom_taxonomy,
+            'hierarchical'       => $custom_taxonomy['hierarchical']
+        );
+        register_taxonomy($custom_taxonomy['singular_name'], $custom_taxonomy['object_type'], $args);
+    }
+
+    foreach ($custom_post_types as $custom_post_type) {
+        $args = array(
+            'labels'             => $custom_post_type,
+            'description'        => $custom_post_type['description'],
+            'public'             => true,
+            'publicly_queryable' => true,
+            'show_ui'            => true,
+            'show_in_menu'       => true,
+            'query_var'          => true,
+            'rewrite'            => array('slug' => $custom_post_type['singular_name']),
+            'capability_type'    => $custom_post_type['capability_type'],
+            'has_archive'        => $custom_post_type['has_archive'],
+            'hierarchical'       => $custom_post_type['hierarchical'],
+            'supports'           => $custom_post_type['supports'],
+            'taxonomies'         => $custom_post_type['taxonomies'],
+            'show_in_rest'       => true
+        );
+        register_post_type($custom_post_type['name'], $args);
+    }
 }
